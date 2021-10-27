@@ -3,12 +3,30 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 
 export default function App() {
+  const defaultInputStyle = {
+    backgroundColor: "#000",
+    color: "#fff",
+    border: "none",
+    outline: "none",
+    width: "30vw",
+    margin: 12,
+    padding: 12,
+    borderBottom: "1px solid #fff",
+    borderRadius: 0,
+    fontSize: "1.5rem",
+  };
+
   const [hex, setHex] = useState("#000000");
   const [rgb, setRgb] = useState("rgb(0, 0, 0)");
   const [color, setColor] = useState("#000");
+  const [inputStyle, setInputStyle] = useState(defaultInputStyle);
 
   const isHexColorLight = (color) => {
-    const hex = color.replace("#", "");
+    let hex = color.replace("#", "");
+    if (hex.length === 3) {
+      hex.split("");
+      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
     const c_r = parseInt(hex.substr(0, 2), 16);
     const c_g = parseInt(hex.substr(2, 2), 16);
     const c_b = parseInt(hex.substr(4, 2), 16);
@@ -16,9 +34,7 @@ export default function App() {
     return brightness > 155;
   };
 
-  useEffect(() => {
-    setColor(isHexColorLight(hex) ? "#000" : "#fff");
-  }, [hex]);
+  useEffect(() => {}, [hex]);
 
   const convertHexToRgb = (hex) => {
     let r = 0,
@@ -47,16 +63,24 @@ export default function App() {
   const changeHex = (e) => {
     const { value } = e.target;
     const isValid = validHex(value);
+    const color = isHexColorLight(value) ? "#000" : "#fff";
+
     setHex(value);
     if (isValid) {
       setRgb(convertHexToRgb(value));
+      setInputStyle({ ...defaultInputStyle, color, backgroundColor: value, borderBottom: `1px solid ${color}` });
+      setColor(color);
+    } else if (!value) {
+      setRgb("");
+    } else {
+      setRgb("rgb(0, 0, 0)");
     }
   };
 
   return (
     <div className="App" style={{ backgroundColor: hex, color }}>
-      <input value={hex} onChange={changeHex} />
-      <input value={rgb} onChange={setRgb} />
+      <input value={hex} onChange={changeHex} style={inputStyle} placeholder="hex" />
+      <input value={rgb} onChange={null} style={inputStyle} placeholder="rgb" />
     </div>
   );
 }

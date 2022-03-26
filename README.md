@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Hex - RGB
+
+Simple Hex to RGB Converter (INCOMPLETE)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
